@@ -216,9 +216,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void check(View view) {
-        Toast("還在開發");
+//        Toast("還在開發");
         Intent intent = new Intent(this, CheckActivity.class);
-//        startActivity(intent);
+        startActivity(intent);
     }
 
     public void save(View view) {

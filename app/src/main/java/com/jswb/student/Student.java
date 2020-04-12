@@ -5,11 +5,6 @@ import android.widget.CheckBox;
 
 public class Student {
     public int number;
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
     public String time = "null";
     public CheckBox checkBox;
 
@@ -19,5 +14,9 @@ public class Student {
     public Student(int number, View view) {
         this.number = number;
         this.checkBox = (CheckBox) view;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }
