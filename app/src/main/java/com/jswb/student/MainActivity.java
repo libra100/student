@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     FirebaseDatabase firebase = FirebaseDatabase.getInstance();
-    DatabaseReference database = firebase.getReference();
+    DatabaseReference database = firebase.getReference().child("Record");
 
     Date curTime;
     SimpleDateFormat md = new SimpleDateFormat("MMdd");
@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     int week = c.get(Calendar.DAY_OF_WEEK);
     int minute;
     int latetime;
+    String[] times = new String[28];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,30 +57,32 @@ public class MainActivity extends AppCompatActivity {
         find();
         setLatetime();
 
-        curTime = new Date(System.currentTimeMillis());
-        date = md.format(curTime);
-
-        class Post {
-            public String card;
-            public String time;
-
-            public Post(String card, String time) {
-                this.card = card;
-                this.time = time;
-            }
+        for (int i = 0; i < times.length; i++) {
+            times[i] = "null";
         }
 
+        curTime = new Date(System.currentTimeMillis());
+        date = md.format(curTime);
 
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                Post post = dataSnapshot.getValue(Post.class);
-//                System.out.println(post);
+                if(dataSnapshot.hasChild("狀態")) {
+                    int state = Integer.parseInt(String.valueOf(dataSnapshot.child("狀態").getValue()));
+                    if (state == 1)
+                        Toast("保存完成");
+                    else if (state == 2)
+                        Toast("清空資料");
+                    for (Student i : students) {
+                        times[i.number - 1] = String.valueOf(dataSnapshot.child(String.valueOf(i.number)).child(date).getValue());
+                    }
+                    database.child("狀態").setValue(0);
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(MainActivity.this, databaseError.toString(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, databaseError.toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -103,12 +106,12 @@ public class MainActivity extends AppCompatActivity {
         }
         if (latetime == -1) {
             tv_time.setText("不用上課啦!");
-            for (CheckBox i : group)
-                i.setEnabled(false);
+//            for (CheckBox i : group)
+//                i.setEnabled(false);
         } else {
             tv_time.setText(String.valueOf(latetime));
-            for (CheckBox i : group)
-                i.setEnabled(true);
+//            for (CheckBox i : group)
+//                i.setEnabled(true);
         }
     }
 
@@ -116,21 +119,21 @@ public class MainActivity extends AppCompatActivity {
         tv_time = findViewById(R.id.time);
         tv_context = findViewById(R.id.tv_context);
         test = findViewById(R.id.test);
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (CheckBox i : group) {
-                    i.setBackgroundResource(R.drawable.btn);
-                    i.setEnabled(!i.isEnabled());
-                }
-                if (test.isChecked()) {
-                    changeTime(tv_time);
-                    for (CheckBox i : group)
-                        i.setSelected(false);
-                } else
-                    setLatetime();
-            }
-        });
+//        test.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                for (CheckBox i : group) {
+//                    i.setBackgroundResource(R.drawable.btn);
+//                    i.setEnabled(!i.isEnabled());
+//                }
+//                if (test.isChecked()) {
+//                    changeTime(tv_time);
+//                    for (CheckBox i : group)
+//                        i.setSelected(false);
+//                } else
+//                    setLatetime();
+//            }
+//        });
 
 //        Student one = new Student(1, findViewById(R.id.one));
         Student two = new Student(2, findViewById(R.id.two));
@@ -213,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void check(View view) {
-        Toast.makeText(this, "還在開發", Toast.LENGTH_SHORT).show();
+        Toast("還在開發");
         Intent intent = new Intent(this, CheckActivity.class);
 //        startActivity(intent);
     }
@@ -221,22 +224,22 @@ public class MainActivity extends AppCompatActivity {
     public void save(View view) {
         boolean thereis = false;
         for (Student i : students) {
-            if (!i.time.contentEquals(i.checkBox.getText())) {
+            if (!i.time.equals(times[i.number - 1])) {
                 thereis = true;
                 break;
             }
         }
         if (thereis)
-            newDay();
+            newDay(1);
         else
-            Toast.makeText(this, "不用保存", Toast.LENGTH_SHORT).show();
+            Toast("不用保存");
     }
 
-    private void newDay() {//上傳資料
-        database.child(date).child("狀態").setValue("上傳");
+    private void newDay(int state) {//上傳資料
+        database.child("狀態").setValue(state);
         for (Student i : students)
-            database.child(date).child(String.valueOf(i.number)).setValue(i.time);
-        database.child(date).child("遲到時間").setValue(latetime);
+            database.child(String.valueOf(i.number)).child(date).setValue(i.time);
+        database.child("遲到時間").child(date).setValue(latetime);
     }
 
     public void clear(View view) {
@@ -249,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         if (!thereis)
-            Toast.makeText(this, "無資料清除", Toast.LENGTH_SHORT).show();
+            Toast("無資料清除");
     }
 
     private void ask() {//確認清除資料
@@ -263,7 +266,8 @@ public class MainActivity extends AppCompatActivity {
                     i.checkBox.setSelected(false);
                     i.checkBox.setBackgroundResource(R.drawable.btn);
                 }
-                newDay();
+                newDay(2);
+                Toast("自動保存");
             }
         }).setNegativeButton("不要好了", new DialogInterface.OnClickListener() {
             @Override
@@ -292,7 +296,9 @@ public class MainActivity extends AppCompatActivity {
     private void click(CheckBox checkBox) {
         checkBox.setSelected(!checkBox.isSelected());
         if (checkBox.isSelected()) {
-            setTime(checkBox);
+            setTime(checkBox, 1);
+            Calendar c = Calendar.getInstance();
+            minute = c.get(Calendar.MINUTE);
             if (minute > latetime)//判斷遲到
                 checkBox.setBackgroundResource(R.drawable.late);
             else checkBox.setBackgroundResource(R.drawable.ontime);
@@ -304,22 +310,21 @@ public class MainActivity extends AppCompatActivity {
         checkBox.setSelected(!checkBox.isSelected());
         if (checkBox.isSelected()) {
             int number = Integer.parseInt((String) checkBox.getText());
-            for (Student i : students)
-                if (i.number == number) {
-                    i.time = "請假";
-                    break;
-                }
+            setTime(checkBox, 0);
             checkBox.setBackgroundResource(R.drawable.rest);
         } else
             checkBox.setBackgroundResource(R.drawable.btn);
     }
 
-    private void setTime(CheckBox checkBox) {
-        getTime();
+    private void setTime(CheckBox checkBox, int state) {
         int number = Integer.parseInt((String) checkBox.getText());
         for (Student i : students)
             if (i.number == number) {
-                i.time = time;
+                getTime();
+                if (state == 1)
+                    i.time = time;
+                else if (state == 0)
+                    i.time = "請假";
                 break;
             }
     }
@@ -327,8 +332,10 @@ public class MainActivity extends AppCompatActivity {
     private void getTime() {
         curTime = new Date(System.currentTimeMillis()); // 獲取當前時間
         time = hm.format(curTime);
-        Toast.makeText(this, time, Toast.LENGTH_SHORT).show();
-        c = Calendar.getInstance();
-        minute = c.get(Calendar.MINUTE);
+        Toast(time);
+    }
+
+    private void Toast(String context) {
+        Toast.makeText(MainActivity.this, context, Toast.LENGTH_SHORT).show();
     }
 }

@@ -3,465 +3,438 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="10dp"
-    android:paddingLeft="30dp"
-    android:paddingRight="30dp"
+    android:layout_margin="20dp"
     tools:context=".MainActivity">
 
-    <ToggleButton
-        android:id="@+id/test"
+    <LinearLayout
+        android:id="@+id/line1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:textOff="正常"
-        android:textOn="測試中" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/check"
+        <CheckBox
+            android:id="@+id/two"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="2"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
+
+        <CheckBox
+            android:id="@+id/three"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="3"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
+
+        <CheckBox
+            android:id="@+id/four"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="4"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
+
+        <CheckBox
+            android:id="@+id/five"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="5"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
+
+        <CheckBox
+            android:id="@+id/six"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="6"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
+
+        <CheckBox
+            android:id="@+id/seven"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="7"
+            android:textColor="@color/text"
+            android:textSize="30sp"
+            android:visibility="gone" />
+
+        <CheckBox
+            android:id="@+id/eight"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="8"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
+
+        <CheckBox
+            android:id="@+id/nine"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="9"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
+
+        <CheckBox
+            android:id="@+id/ten"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="10"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
+
+        <CheckBox
+            android:id="@+id/eleven"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="11"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
+
+        <CheckBox
+            android:id="@+id/twelve"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="12"
+            android:textColor="@color/text"
+            android:textSize="30sp"
+            android:visibility="gone" />
+
+        <CheckBox
+            android:id="@+id/thirteen"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="13"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
+
+        <CheckBox
+            android:id="@+id/fourteen"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="14"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
+
+        <CheckBox
+            android:id="@+id/fifteen"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="15"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:background="@drawable/fun"
-        android:onClick="check"
-        android:text="查看"
-        android:textColor="@color/text"
-        android:textSize="20sp" />
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
-    <TextView
+        <ToggleButton
+            android:id="@+id/test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textOff="正常"
+            android:textOn="測試中" />
+
+        <Button
+            android:id="@+id/check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/fun"
+            android:onClick="check"
+            android:text="查看"
+            android:textColor="@color/text"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="遲到時間"
+            android:textColor="@color/text"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:onClick="change"
+            android:text=""
+            android:textColor="@color/text"
+            android:textSize="30sp" />
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/fun"
+            android:onClick="save"
+            android:text="保存"
+            android:textColor="@color/text"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_context"
+            android:layout_width="80dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/text"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/fun"
+            android:onClick="clear"
+            android:text="清空"
+            android:textColor="@color/text"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="180dp"
-        android:text="遲到時間"
-        android:textColor="@color/text"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="220dp"
-        android:onClick="change"
-        android:text=""
-        android:textColor="@color/text"
-        android:textSize="30sp" />
-
-    <Button
-        android:id="@+id/save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="300dp"
-        android:background="@drawable/fun"
-        android:onClick="save"
-        android:text="保存"
-        android:textColor="@color/text"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/tv_context"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="360dp"
-        android:textColor="@color/text"
-        android:textSize="14sp" />
-
-    <Button
-        android:id="@+id/send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="500dp"
-        android:background="@drawable/fun"
-        android:onClick="clear"
-        android:text="清空"
-        android:textColor="@color/text"
-        android:textSize="20sp" />
-
-
-    <CheckBox
-        android:id="@+id/one"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="1"
-        android:textColor="@color/text"
-        android:textSize="30sp"
-        android:visibility="gone" />
-
-    <CheckBox
-        android:id="@+id/two"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/one"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="2"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
-
-    <CheckBox
-        android:id="@+id/three"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/two"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="3"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
-
-    <CheckBox
-        android:id="@+id/four"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/three"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="4"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
-
-    <CheckBox
-        android:id="@+id/five"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/four"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="5"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
-
-    <CheckBox
-        android:id="@+id/six"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/five"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="6"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
-
-    <CheckBox
-        android:id="@+id/seven"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/six"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="7"
-        android:textColor="@color/text"
-        android:textSize="30sp"
-        android:visibility="gone" />
-
-    <CheckBox
-        android:id="@+id/eight"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/seven"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="8"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
-
-    <CheckBox
-        android:id="@+id/nine"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/eight"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="9"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
-
-    <CheckBox
-        android:id="@+id/ten"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/nine"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="10"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
-
-    <CheckBox
-        android:id="@+id/eleven"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ten"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="11"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
-
-    <CheckBox
-        android:id="@+id/twelve"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/eleven"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="12"
-        android:textColor="@color/text"
-        android:textSize="30sp"
-        android:visibility="gone" />
-
-    <CheckBox
-        android:id="@+id/thirteen"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/twelve"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="13"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
-
-    <CheckBox
-        android:id="@+id/fourteen"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/thirteen"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="14"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
-
-    <CheckBox
-        android:id="@+id/fifteen"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/fourteen"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="15"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
-
-    <CheckBox
-        android:id="@+id/sixteen"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/fifteen"
-        android:layout_alignParentTop="true"
+        android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="16"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
+        android:orientation="vertical">
 
-    <CheckBox
-        android:id="@+id/seventeen"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/sixteen"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="17"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
+        <CheckBox
+            android:id="@+id/one"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="1"
+            android:textColor="@color/text"
+            android:textSize="30sp"
+            android:visibility="gone" />
 
-    <CheckBox
-        android:id="@+id/eighteen"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/seventeen"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="18"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
 
-    <CheckBox
-        android:id="@+id/nineteen"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/eighteen"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="19"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
+        <CheckBox
+            android:id="@+id/sixteen"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
 
-    <CheckBox
-        android:id="@+id/twenty"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/nineteen"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="20"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
+        <CheckBox
+            android:id="@+id/seventeen"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="17"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
 
-    <CheckBox
-        android:id="@+id/twentyone"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/twenty"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="21"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
+        <CheckBox
+            android:id="@+id/eighteen"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="18"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
 
-    <CheckBox
-        android:id="@+id/twentytwo"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/twentyone"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="22"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
+        <CheckBox
+            android:id="@+id/nineteen"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="19"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
 
-    <CheckBox
-        android:id="@+id/twentythree"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/twentytwo"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="23"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
+        <CheckBox
+            android:id="@+id/twenty"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="20"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
 
-    <CheckBox
-        android:id="@+id/twentyfour"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/twentythree"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="24"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
+        <CheckBox
+            android:id="@+id/twentyone"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="21"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
 
-    <CheckBox
-        android:id="@+id/twentyfive"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/twentyfour"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="25"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
+        <CheckBox
+            android:id="@+id/twentytwo"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="22"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
 
-    <CheckBox
-        android:id="@+id/twentysix"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/twentyfive"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="26"
-        android:textColor="@color/text"
-        android:textSize="30sp"
-        android:visibility="gone" />
+        <CheckBox
+            android:id="@+id/twentythree"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="23"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
 
-    <CheckBox
-        android:id="@+id/twentyseven"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/twentysix"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="27"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
+        <CheckBox
+            android:id="@+id/twentyfour"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="24"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
 
-    <CheckBox
-        android:id="@+id/twentyeight"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/twentyseven"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btn"
-        android:button="@null"
-        android:gravity="center"
-        android:text="28"
-        android:textColor="@color/text"
-        android:textSize="30sp" />
+        <CheckBox
+            android:id="@+id/twentyfive"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="25"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
+
+        <CheckBox
+            android:id="@+id/twentysix"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="26"
+            android:textColor="@color/text"
+            android:textSize="30sp"
+            android:visibility="gone" />
+
+        <CheckBox
+            android:id="@+id/twentyseven"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="27"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
+
+        <CheckBox
+            android:id="@+id/twentyeight"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance"
+            android:background="@drawable/btn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="28"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
+    </LinearLayout>
+
 
 </RelativeLayout>
