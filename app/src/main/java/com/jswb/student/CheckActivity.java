@@ -1,26 +1,18 @@
 package com.jswb.student;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
-import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,7 +24,6 @@ import java.util.Calendar;
 
 public class CheckActivity extends AppCompatActivity {
 
-    private Button btn_date;
     private TextView tv_date;
     private Calendar c;
     private RecyclerView recyclerView;
@@ -51,7 +42,6 @@ public class CheckActivity extends AppCompatActivity {
         setContentView(R.layout.activity_check);
         database.child("狀態").setValue(3);
 
-        btn_date = findViewById(R.id.date);
         tv_date = findViewById(R.id.tv_date);
 
 
