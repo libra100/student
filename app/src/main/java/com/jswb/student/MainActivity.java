@@ -34,8 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private ToggleButton test;
 
 
-    FirebaseDatabase firebase = FirebaseDatabase.getInstance();
-    DatabaseReference database = firebase.getReference().child("Record");
+    DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("Record");
 
     Date curTime;
     SimpleDateFormat md = new SimpleDateFormat("MMdd");
@@ -82,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Toast.makeText(MainActivity.this, databaseError.toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -216,7 +214,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void check(View view) {
-//        Toast("還在開發");
         Intent intent = new Intent(this, CheckActivity.class);
         startActivity(intent);
     }
@@ -267,7 +264,6 @@ public class MainActivity extends AppCompatActivity {
                     i.checkBox.setBackgroundResource(R.drawable.btn);
                 }
                 newDay(2);
-                Toast("自動保存");
             }
         }).setNegativeButton("不要好了", new DialogInterface.OnClickListener() {
             @Override

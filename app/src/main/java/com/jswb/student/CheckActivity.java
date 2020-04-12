@@ -1,36 +1,89 @@
 package com.jswb.student;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.util.Calendar;
 
 public class CheckActivity extends AppCompatActivity {
 
-    private Button date;
+    private Button btn_date;
     private TextView tv_date;
     private Calendar c;
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager manager;
+    private MyAdapter adapter;
+    private String date;
+    private String[] students = new String[24];
+    private int[] number = new int[]{2, 3, 4, 5, 6, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20,
+            21, 22, 23, 24, 25, 27, 28};
+
+    DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("Record");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check);
+        database.child("狀態").setValue(3);
 
-        date = findViewById(R.id.date);
+        btn_date = findViewById(R.id.date);
         tv_date = findViewById(R.id.tv_date);
+
+
+        recyclerView = findViewById(R.id.rv);
+        recyclerView.setHasFixedSize(true);//固定大小
+        manager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(manager);
+        adapter = new MyAdapter(students);
+        recyclerView.setAdapter(adapter);
+
+
         c = Calendar.getInstance();
         refresh(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (int i = 0; i < students.length; i++)
+                    students[i] = dataSnapshot.child(String.valueOf(number[i])).child(date).getValue().toString();
+                adapter.setData(students);
+                adapter.notifyDataSetChanged();
+                database.child("狀態").setValue(0);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 
     public void date(View view) {
-        c = Calendar.getInstance();
+
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
@@ -42,7 +95,6 @@ public class CheckActivity extends AppCompatActivity {
             }
         }, year, month, day);
         datePickerDialog.show();
-
     }
 
     private void refresh(int year, int month, int day) {
@@ -50,6 +102,14 @@ public class CheckActivity extends AppCompatActivity {
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, day);
         String dateText = DateFormat.getDateInstance().format(c.getTime());
+        String mon = String.valueOf(c.get(Calendar.MONTH) + 1);
+        String da = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
+        if (c.get(Calendar.MONTH) < 10)
+            mon = "0" + mon;
+        if (c.get(Calendar.DAY_OF_MONTH) < 10)
+            da = "0" + da;
+        date = mon + da;
         tv_date.setText(dateText);
+        database.child("狀態").setValue(3);
     }
 }
