@@ -9,15 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -30,8 +26,8 @@ public class CheckActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager manager;
     private MyAdapter adapter;
     private String date;
-    private String[] students = new String[24];
-    private int[] number = new int[]{2, 3, 4, 5, 6, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20,
+    private String[] students = new String[25];
+    private int[] number = new int[]{0, 2, 3, 4, 5, 6, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20,
             21, 22, 23, 24, 25, 27, 28};
 
     DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("Record");
@@ -43,7 +39,7 @@ public class CheckActivity extends AppCompatActivity {
         database.child("狀態").setValue(3);
 
         tv_date = findViewById(R.id.tv_date);
-
+        students[0] = "打卡時間";
 
         recyclerView = findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);//固定大小
@@ -59,8 +55,17 @@ public class CheckActivity extends AppCompatActivity {
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (int i = 0; i < students.length; i++)
-                    students[i] = dataSnapshot.child(String.valueOf(number[i])).child(date).getValue().toString();
+                if (dataSnapshot.child(String.valueOf(number[1])).hasChild(date)) {
+                    for (int i = 1; i < number.length; i++)
+                        if (dataSnapshot.child(String.valueOf(number[i])).child(date).getValue().toString().equals("null"))
+                            students[i] = "沒到";
+                        else
+                            students[i] = dataSnapshot.child(String.valueOf(number[i])).child(date).getValue().toString();
+                } else {
+                    Toast.makeText(CheckActivity.this, "沒有這天的資料", Toast.LENGTH_SHORT).show();
+                    for (int i = 1; i < number.length; i++)
+                        students[i] = "";
+                }
                 adapter.setData(students);
                 adapter.notifyDataSetChanged();
                 database.child("狀態").setValue(0);
@@ -73,7 +78,10 @@ public class CheckActivity extends AppCompatActivity {
     }
 
     public void date(View view) {
+        changeDate();
+    }
 
+    private void changeDate() {
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
