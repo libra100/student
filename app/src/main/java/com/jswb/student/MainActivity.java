@@ -1,11 +1,14 @@
 package com.jswb.student;
 
 import android.app.AlertDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,7 +30,6 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
 
     private Student[] students;
-
     private CheckBox[] group = new CheckBox[24];
     private TextView tv_time;
     private TextView tv_context;
@@ -46,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     int week = c.get(Calendar.DAY_OF_WEEK);
     int minute;
     int latetime;
-    String[] times = new String[28];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +55,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         find();
-        setLatetime();
 
-        for (int i = 0; i < times.length; i++) {
-            times[i] = "null";
+        switch (week) {
+            case 2:
+            case 6:
+                schoolDay();
+                latetime = 30;
+                break;
+            case 3:
+            case 4:
+            case 5:
+                schoolDay();
+                latetime = 20;
+                break;
+            default:
+                tv_time.setText("不用上課啦!");
+                break;
         }
 
         curTime = new Date(System.currentTimeMillis());
@@ -66,15 +79,12 @@ public class MainActivity extends AppCompatActivity {
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild("狀態")) {
+                if (dataSnapshot.hasChild("狀態")) {
                     int state = Integer.parseInt(String.valueOf(dataSnapshot.child("狀態").getValue()));
                     if (state == 1)
                         Toast("保存完成");
                     else if (state == 2)
                         Toast("清空資料");
-                    for (Student i : students) {
-                        times[i.number - 1] = String.valueOf(dataSnapshot.child(String.valueOf(i.number)).child(date).getValue());
-                    }
                     database.child("狀態").setValue(0);
                 }
             }
@@ -87,51 +97,29 @@ public class MainActivity extends AppCompatActivity {
         tv_context.setText("還要做發送到Line群組告知遲到的人，加油!!");
     }
 
-    private void setLatetime() {
-        switch (week) {
-            case 2:
-            case 6:
-                latetime = 30;
-                break;
-            case 3:
-            case 4:
-            case 5:
-                latetime = 20;
-                break;
-            default:
-                latetime = -1;
-                break;
-        }
-        if (latetime == -1) {
-            tv_time.setText("不用上課啦!");
-//            for (CheckBox i : group)
-//                i.setEnabled(false);
-        } else {
+    private void schoolDay() {
+        if (c.get(Calendar.HOUR_OF_DAY) < 8) {
             tv_time.setText(String.valueOf(latetime));
-//            for (CheckBox i : group)
-//                i.setEnabled(true);
-        }
+        } else if (c.get(Calendar.HOUR_OF_DAY) > 16) {
+            tv_time.setText("自主練習");
+        } else
+            for (CheckBox i : group)
+                i.setEnabled(false);
+        tv_time.setText("上課");
     }
 
     private void find() {
         tv_time = findViewById(R.id.time);
         tv_context = findViewById(R.id.tv_context);
         test = findViewById(R.id.test);
-//        test.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                for (CheckBox i : group) {
-//                    i.setBackgroundResource(R.drawable.btn);
-//                    i.setEnabled(!i.isEnabled());
-//                }
-//                if (test.isChecked()) {
-//                    changeTime(tv_time);
-//                    for (CheckBox i : group)
-//                        i.setSelected(false);
-//                } else
-//                    setLatetime();
-//            }
-//        });
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!test.isSelected()) {
+
+                }
+            }
+        });
 
 //        Student one = new Student(1, findViewById(R.id.one));
         Student two = new Student(2, findViewById(R.id.two));
@@ -169,7 +157,6 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < students.length; i++) {
             group[i] = students[i].checkBox;
         }
-
         setClickListener();
     }
 
@@ -188,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeTime(final TextView textView) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setItems(R.array.time_array, new DialogInterface.OnClickListener() {
+        builder.setItems(R.array.time, new DialogInterface.OnClickListener() {
             int pick;
 
             @Override
@@ -219,20 +206,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void save(View view) {
-        boolean thereis = false;
-        for (Student i : students) {
-            if (!i.time.equals(times[i.number - 1])) {
-                thereis = true;
-                break;
-            }
-        }
-        if (thereis)
-            newDay(1);
-        else
-            Toast("不用保存");
+        newDay(1);
     }
 
-    private void newDay(int state) {//上傳資料
+    private void newDay(int state) {
         database.child("狀態").setValue(state);
         for (Student i : students)
             database.child(String.valueOf(i.number)).child(date).setValue(i.time);
@@ -252,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
             Toast("無資料清除");
     }
 
-    private void ask() {//確認清除資料
+    private void ask() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("你認真?").setMessage("確定要清空所有同學的狀態嗎");
         builder.setPositiveButton("我認真", new DialogInterface.OnClickListener() {
@@ -293,40 +270,87 @@ public class MainActivity extends AppCompatActivity {
         checkBox.setSelected(!checkBox.isSelected());
         if (checkBox.isSelected()) {
             setTime(checkBox, 1);
-            Calendar c = Calendar.getInstance();
-            minute = c.get(Calendar.MINUTE);
-            if (minute > latetime)//判斷遲到
-                checkBox.setBackgroundResource(R.drawable.late);
-            else checkBox.setBackgroundResource(R.drawable.ontime);
         } else
             checkBox.setBackgroundResource(R.drawable.btn);
     }
 
-    private void longclick(CheckBox checkBox) {
-        checkBox.setSelected(!checkBox.isSelected());
-        if (checkBox.isSelected()) {
-            int number = Integer.parseInt((String) checkBox.getText());
-            setTime(checkBox, 0);
-            checkBox.setBackgroundResource(R.drawable.rest);
-        } else
-            checkBox.setBackgroundResource(R.drawable.btn);
+    private void longclick(final CheckBox checkBox) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setItems(R.array.function, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        int number = Integer.parseInt((String) checkBox.getText());
+                        for (Student i : students)
+                            if (i.number == number) {
+                                Toast(i.time);
+                            }
+                        break;
+                    case 1:
+                        if (checkBox.isSelected())
+                            changeGet(checkBox);
+                        else
+                            Toast("此人還沒來，不能更改時間");
+                        break;
+                    case 2:
+                        if (!checkBox.isSelected()) {
+                            checkBox.setSelected(true);
+                            setTime(checkBox, 0);
+                            checkBox.setBackgroundResource(R.drawable.rest);
+                        } else {
+                            Toast("請先將狀態取消，再重新設定");
+                        }
+                        break;
+                }
+            }
+        }).show();
+    }
+
+    private void changeGet(final CheckBox checkBox) {
+        int hourOfDay = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                int number = Integer.parseInt((String) checkBox.getText());
+                for (Student i : students)
+                    if (i.number == number) {
+                        time = hourOfDay + ":" + minute;
+                        isLate(checkBox, minute);
+                        Toast(time);
+                        i.time = time;
+                    }
+            }
+        }, hourOfDay, minute, DateFormat.is24HourFormat(this));
+        timePickerDialog.show();
     }
 
     private void setTime(CheckBox checkBox, int state) {
         int number = Integer.parseInt((String) checkBox.getText());
         for (Student i : students)
             if (i.number == number) {
-                getTime();
-                if (state == 1)
+                if (state == 1) {
+                    Calendar c = Calendar.getInstance();
+                    minute = c.get(Calendar.MINUTE);
+                    isLate(checkBox, minute);
+                    getTime();
                     i.time = time;
-                else if (state == 0)
+                } else if (state == 0)
                     i.time = "請假";
                 break;
             }
     }
 
+    private void isLate(CheckBox checkBox, int minute) {
+        if (minute > latetime)
+            checkBox.setBackgroundResource(R.drawable.late);
+        else checkBox.setBackgroundResource(R.drawable.ontime);
+    }
+
     private void getTime() {
-        curTime = new Date(System.currentTimeMillis()); // 獲取當前時間
+        curTime = new Date(System.currentTimeMillis());
         time = hm.format(curTime);
         Toast(time);
     }

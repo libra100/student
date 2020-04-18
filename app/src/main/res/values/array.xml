@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="time">
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+        <item>35</item>
+    </string-array>
+
+    <string-array name="function">
+        <item>查看時間</item>
+        <item>更改時間</item>
+        <item>請假</item>
+
+    </string-array>
+</resources>
