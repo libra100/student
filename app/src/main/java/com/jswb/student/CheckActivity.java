@@ -22,8 +22,6 @@ public class CheckActivity extends AppCompatActivity {
 
     private TextView tv_date;
     private Calendar c;
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager manager;
     private MyAdapter adapter;
     private String date;
     private String[] students = new String[25];
@@ -41,9 +39,9 @@ public class CheckActivity extends AppCompatActivity {
         tv_date = findViewById(R.id.tv_date);
         students[0] = "打卡時間";
 
-        recyclerView = findViewById(R.id.rv);
+        RecyclerView recyclerView = findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);//固定大小
-        manager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);
         adapter = new MyAdapter(students);
         recyclerView.setAdapter(adapter);

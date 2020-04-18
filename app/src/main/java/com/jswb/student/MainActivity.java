@@ -112,14 +112,14 @@ public class MainActivity extends AppCompatActivity {
         tv_time = findViewById(R.id.time);
         tv_context = findViewById(R.id.tv_context);
         test = findViewById(R.id.test);
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!test.isSelected()) {
-
-                }
-            }
-        });
+//        test.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!test.isSelected()) {
+//
+//                }
+//            }
+//        });
 
 //        Student one = new Student(1, findViewById(R.id.one));
         Student two = new Student(2, findViewById(R.id.two));
