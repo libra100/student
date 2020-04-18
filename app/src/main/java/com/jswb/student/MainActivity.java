@@ -196,6 +196,16 @@ public class MainActivity extends AppCompatActivity {
                 }
                 textView.setText("" + pick);
                 latetime = pick;
+                for (CheckBox i : group)
+                    if (i.isSelected()) {
+                        int j = Integer.parseInt(i.getText().toString());
+                        for (Student k : students)
+                            if (k.number == j) {
+                                String time = k.time.substring(3);
+                                isLate(i, Integer.parseInt(time));
+                            }
+                        Toast("更改完成");
+                    }
             }
         }).setCancelable(false).show();
     }
@@ -240,7 +250,6 @@ public class MainActivity extends AppCompatActivity {
                     i.checkBox.setSelected(false);
                     i.checkBox.setBackgroundResource(R.drawable.btn);
                 }
-                newDay(2);
             }
         }).setNegativeButton("不要好了", new DialogInterface.OnClickListener() {
             @Override
@@ -270,8 +279,10 @@ public class MainActivity extends AppCompatActivity {
         checkBox.setSelected(!checkBox.isSelected());
         if (checkBox.isSelected()) {
             setTime(checkBox, 1);
-        } else
+        } else {
+            setTime(checkBox, -1);
             checkBox.setBackgroundResource(R.drawable.btn);
+        }
     }
 
     private void longclick(final CheckBox checkBox) {
@@ -285,19 +296,32 @@ public class MainActivity extends AppCompatActivity {
                         int number = Integer.parseInt((String) checkBox.getText());
                         for (Student i : students)
                             if (i.number == number) {
-                                Toast(i.time);
+                                if (i.time.equals("null"))
+                                    Toast("沒有時間");
+                                else
+                                    Toast(i.time);
                             }
                         break;
                     case 1:
-                        if (checkBox.isSelected())
-                            changeGet(checkBox);
-                        else
-                            Toast("此人還沒來，不能更改時間");
+                        if (checkBox.isSelected()) {
+                            String s = null;
+                            int j = Integer.parseInt(checkBox.getText().toString());
+                            for (Student k : students)
+                                if (k.number == j) {
+                                    s = k.time;
+                                }
+                            if (!s.equals("請假"))
+                                changeGet(checkBox, s);
+                            else
+                                Toast("請假無法更改時間");
+                        } else
+                            Toast("還沒按過");
                         break;
                     case 2:
                         if (!checkBox.isSelected()) {
                             checkBox.setSelected(true);
                             setTime(checkBox, 0);
+                            Toast(checkBox.getText().toString() + "號請假");
                             checkBox.setBackgroundResource(R.drawable.rest);
                         } else {
                             Toast("請先將狀態取消，再重新設定");
@@ -308,16 +332,22 @@ public class MainActivity extends AppCompatActivity {
         }).show();
     }
 
-    private void changeGet(final CheckBox checkBox) {
-        int hourOfDay = c.get(Calendar.HOUR_OF_DAY);
-        int minute = c.get(Calendar.MINUTE);
+    private void changeGet(final CheckBox checkBox, String s) {
+        int hourOfDay = Integer.parseInt(s.substring(0, 2));
+        int minute = Integer.parseInt(s.substring(3, 5));
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 int number = Integer.parseInt((String) checkBox.getText());
                 for (Student i : students)
                     if (i.number == number) {
-                        time = hourOfDay + ":" + minute;
+                        String hour = String.valueOf(hourOfDay);
+                        String min = String.valueOf(minute);
+                        if (hourOfDay < 10)
+                            hour = "0" + hourOfDay;
+                        if (minute < 10)
+                            min = "0" + minute;
+                        time = hour + ":" + min;
                         isLate(checkBox, minute);
                         Toast(time);
                         i.time = time;
@@ -339,6 +369,8 @@ public class MainActivity extends AppCompatActivity {
                     i.time = time;
                 } else if (state == 0)
                     i.time = "請假";
+                else if (state == -1)
+                    i.time = "null";
                 break;
             }
     }
