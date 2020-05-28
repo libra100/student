@@ -2,10 +2,14 @@ package com.jswb.student;
 
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Handler;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -15,7 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.widget.ToggleButton;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,10 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox[] group = new CheckBox[24];
     private TextView tv_time;
     private TextView tv_context;
-    private ToggleButton test;
-
-
-    DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("Record");
+    int open;
+    private TextView tv_word;
+    private Button btn_save;
 
     Date curTime;
     SimpleDateFormat md = new SimpleDateFormat("MMdd");
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     int week = c.get(Calendar.DAY_OF_WEEK);
     int minute;
     int latetime;
+    private DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("Record");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,18 +58,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         find();
+        open = c.get(Calendar.HOUR_OF_DAY);
 
+        tv_context.setText(String.valueOf(open));
         switch (week) {
             case 2:
             case 6:
-                schoolDay();
                 latetime = 30;
+                schoolDay();
                 break;
             case 3:
             case 4:
             case 5:
-                schoolDay();
                 latetime = 20;
+                schoolDay();
                 break;
             default:
                 tv_time.setText("不用上課啦!");
@@ -94,61 +99,78 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        tv_context.setText("還要做發送到Line群組告知遲到的人，加油!!");
+        if (TestNetWork())
+            btn_save.setVisibility(View.VISIBLE);
+        else
+            btn_save.setVisibility(View.INVISIBLE);
+    }
+
+    public boolean TestNetWork() {
+        Context context = this;
+        if (context != null) {
+            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
+            Handler handler = new Handler();
+            if (activeNetInfo == null) {
+                handler.sendEmptyMessage(8);
+                return false;
+            }
+            boolean netInfo = activeNetInfo.isAvailable();
+            if (!netInfo) {
+                handler.sendEmptyMessage(8);
+                return false;
+            }
+        }
+        return true;
     }
 
     private void schoolDay() {
-        if (c.get(Calendar.HOUR_OF_DAY) < 8) {
+        if (open < 8) {
             tv_time.setText(String.valueOf(latetime));
-        } else if (c.get(Calendar.HOUR_OF_DAY) > 16) {
+        } else if (open > 15) {
+            tv_word.setVisibility(View.INVISIBLE);
             tv_time.setText("自主練習");
-        } else
+        } else {
             for (CheckBox i : group)
                 i.setEnabled(false);
-        tv_time.setText("上課");
+            tv_time.setText("上課時間");
+        }
     }
 
     private void find() {
         tv_time = findViewById(R.id.time);
         tv_context = findViewById(R.id.tv_context);
-        test = findViewById(R.id.test);
-//        test.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!test.isSelected()) {
-//
-//                }
-//            }
-//        });
+        tv_word = findViewById(R.id.word);
+        btn_save = findViewById(R.id.save);
 
-//        Student one = new Student(1, findViewById(R.id.one));
-        Student two = new Student(2, findViewById(R.id.two));
-        Student three = new Student(3, findViewById(R.id.three));
-        Student four = new Student(4, findViewById(R.id.four));
-        Student five = new Student(5, findViewById(R.id.five));
-        Student six = new Student(6, findViewById(R.id.six));
-//        Student seven = new Student(7, findViewById(R.id.seven));
-        Student eight = new Student(8, findViewById(R.id.eight));
-        Student nine = new Student(9, findViewById(R.id.nine));
-        Student ten = new Student(10, findViewById(R.id.ten));
-        Student eleven = new Student(11, findViewById(R.id.eleven));
-//        Student twelve = new Student(12, findViewById(R.id.twelve));
-        Student thirteen = new Student(13, findViewById(R.id.thirteen));
-        Student fourteen = new Student(14, findViewById(R.id.fourteen));
-        Student fifteen = new Student(15, findViewById(R.id.fifteen));
-        Student sixteen = new Student(16, findViewById(R.id.sixteen));
-        Student seventeen = new Student(17, findViewById(R.id.seventeen));
-        Student eighteen = new Student(18, findViewById(R.id.eighteen));
-        Student nineteen = new Student(19, findViewById(R.id.nineteen));
-        Student twenty = new Student(20, findViewById(R.id.twenty));
-        Student twentyone = new Student(21, findViewById(R.id.twentyone));
-        Student twentytwo = new Student(22, findViewById(R.id.twentytwo));
-        Student twentythree = new Student(23, findViewById(R.id.twentythree));
-        Student twentyfour = new Student(24, findViewById(R.id.twentyfour));
-        Student twentyfive = new Student(25, findViewById(R.id.twentyfive));
-//        Student twentysix = new Student(26, findViewById(R.id.twentysix));
-        Student twentyseven = new Student(27, findViewById(R.id.twentyseven));
-        Student twentyeight = new Student(28, findViewById(R.id.twentyeight));
+//        Student one = new Student(1, "", findViewById(R.id.one));
+        Student two = new Student(2, "", findViewById(R.id.two));
+        Student three = new Student(3, "5529213F", findViewById(R.id.three));
+        Student four = new Student(4, "2529093F", findViewById(R.id.four));
+        Student five = new Student(5, "59306099", findViewById(R.id.five));
+        Student six = new Student(6, "", findViewById(R.id.six));
+//        Student seven = new Student(7, "", findViewById(R.id.seven));
+        Student eight = new Student(8, "", findViewById(R.id.eight));
+        Student nine = new Student(9, "05EA143F", findViewById(R.id.nine));
+        Student ten = new Student(10, "F93E38A3", findViewById(R.id.ten));
+        Student eleven = new Student(11, "E5B5813C", findViewById(R.id.eleven));
+//        Student twelve = new Student(12, "",findViewById(R.id.twelve));
+        Student thirteen = new Student(13, "35E2803C", findViewById(R.id.thirteen));
+        Student fourteen = new Student(14, "55B0873C", findViewById(R.id.fourteen));
+        Student fifteen = new Student(15, "A587833C", findViewById(R.id.fifteen));
+        Student sixteen = new Student(16, "8509883C", findViewById(R.id.sixteen));
+        Student seventeen = new Student(17, "95918F3D", findViewById(R.id.seventeen));
+        Student eighteen = new Student(18, "", findViewById(R.id.eighteen));
+        Student nineteen = new Student(19, "D5B6913D", findViewById(R.id.nineteen));
+        Student twenty = new Student(20, "F5B31A3F", findViewById(R.id.twenty));
+        Student twentyone = new Student(21, "25DA243F", findViewById(R.id.twentyone));
+        Student twentytwo = new Student(22, "", findViewById(R.id.twentytwo));
+        Student twentythree = new Student(23, "", findViewById(R.id.twentythree));
+        Student twentyfour = new Student(24, "B5C00C3F", findViewById(R.id.twentyfour));
+        Student twentyfive = new Student(25, "C5F5823C", findViewById(R.id.twentyfive));
+//        Student twentysix = new Student(26, "",findViewById(R.id.twentysix));
+        Student twentyseven = new Student(27, "15EE1A3F", findViewById(R.id.twentyseven));
+        Student twentyeight = new Student(28, "", findViewById(R.id.twentyeight));
 
         students = new Student[]{two, three, four, five, six, eight, nine, ten, eleven, thirteen,
                 fourteen, fifteen, sixteen, seventeen, eighteen, nineteen, twenty, twentyone,
@@ -208,11 +230,6 @@ public class MainActivity extends AppCompatActivity {
                     }
             }
         }).setCancelable(false).show();
-    }
-
-    public void check(View view) {
-        Intent intent = new Intent(this, CheckActivity.class);
-        startActivity(intent);
     }
 
     public void save(View view) {
@@ -365,7 +382,9 @@ public class MainActivity extends AppCompatActivity {
                     Calendar c = Calendar.getInstance();
                     minute = c.get(Calendar.MINUTE);
                     isLate(checkBox, minute);
-                    getTime();
+                    curTime = new Date(System.currentTimeMillis());
+                    time = hm.format(curTime);
+                    Toast(time);
                     i.time = time;
                 } else if (state == 0)
                     i.time = "請假";
@@ -379,12 +398,6 @@ public class MainActivity extends AppCompatActivity {
         if (minute > latetime)
             checkBox.setBackgroundResource(R.drawable.late);
         else checkBox.setBackgroundResource(R.drawable.ontime);
-    }
-
-    private void getTime() {
-        curTime = new Date(System.currentTimeMillis());
-        time = hm.format(curTime);
-        Toast(time);
     }
 
     private void Toast(String context) {
