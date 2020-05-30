@@ -20,6 +20,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void Auto(View view) {
+        Intent intent = new Intent(this, AutoActivity.class);
+        startActivity(intent);
     }
 
     public void Check(View view) {
