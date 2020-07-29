@@ -5,7 +5,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
@@ -25,9 +28,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class AutoActivity extends AppCompatActivity {
 
+    boolean check;
     private TextView tv_context;
     private EditText et_number;
     private Button btn_send;
@@ -45,10 +50,12 @@ public class AutoActivity extends AppCompatActivity {
         webView = findViewById(R.id.web);
         tv_number = findViewById(R.id.tv_number);
 
+        et_number.setVisibility(View.INVISIBLE);
+
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
         webView.setWebViewClient(new WebViewClient()); //不調用系統瀏覽器
-        webView.loadUrl("https://www.google.com/");
+        webView.loadUrl("https://bin.webduino.io/dodax/1/edit?");
 
 
         et_number.setVisibility(View.INVISIBLE);
@@ -76,16 +83,16 @@ public class AutoActivity extends AppCompatActivity {
                             InputMethodManager inputManager = (InputMethodManager)
                                     getSystemService(Context.INPUT_METHOD_SERVICE);
 
-                            assert inputManager != null;
-                            inputManager.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(),
-                                    InputMethodManager.HIDE_NOT_ALWAYS);
+                    assert inputManager != null;
+                    inputManager.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
 
-                            tv_context.setText("Ready");
-                            et_number.setText("");
-                            et_number.setVisibility(View.INVISIBLE);
-                            btn_send.setVisibility(View.INVISIBLE);
-                        }
-                    });
+                    tv_context.setText("Ready");
+                    et_number.setText("");
+                    et_number.setVisibility(View.INVISIBLE);
+                    btn_send.setVisibility(View.INVISIBLE);
+                }
+            });
                 }
             }
 
@@ -93,7 +100,11 @@ public class AutoActivity extends AppCompatActivity {
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 myVibrator.vibrate(500);
                 Toast.makeText(AutoActivity.this, dataSnapshot.child("座號").getValue().toString() + "到了", Toast.LENGTH_SHORT).show();
-                tv_number.setText(tv_number.getText().toString() + "," + dataSnapshot.child("座號").getValue());
+                if(!check) {
+                    tv_number.setText(tv_number.getText().toString() + dataSnapshot.child("座號").getValue());
+                    check = !check;
+                }else
+                    tv_number.setText(tv_number.getText().toString() + "," + dataSnapshot.child("座號").getValue());
             }
 
             @Override
