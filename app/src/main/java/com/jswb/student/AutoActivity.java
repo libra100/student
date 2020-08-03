@@ -7,8 +7,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
@@ -27,7 +31,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 public class AutoActivity extends AppCompatActivity {
@@ -52,10 +59,101 @@ public class AutoActivity extends AppCompatActivity {
 
         et_number.setVisibility(View.INVISIBLE);
 
+        final BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        if (adapter != null) {
+            init();
+        }
+        final Set<BluetoothDevice> devices = adapter.getBondedDevices();
+        for (int i = 0; i < devices.size(); i++) {
+            BluetoothDevice device = devices.iterator().next();
+            System.out.println(device.getName());
+        }
+
+        if (!adapter.isEnabled()) {
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            // 設定藍芽可見性，最多300秒
+            intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+            startActivity(intent);
+        }
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
+        intentFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+        intentFilter.addAction(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED);
+        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+
+        BroadcastReceiver receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                String name;
+                int connectState;
+                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                    // 獲取查詢到的藍芽裝置
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    System.out.println(device.getName());
+                    // 如果查詢到的裝置符合要連線的裝置，處理
+                    name = device.getName();
+                    if (device.getName().equalsIgnoreCase(name)) {
+                        // 搜尋藍芽裝置的過程佔用資源比較多，一旦找到需要連線的裝置後需要及時關閉搜尋
+                        adapter.cancelDiscovery();
+                        // 獲取藍芽裝置的連線狀態
+                        connectState = device.getBondState();
+                        switch (connectState) {
+                            // 未配對
+                            case BluetoothDevice.BOND_NONE:
+                                // 配對
+                                try {
+                                    Method createBondMethod = BluetoothDevice.class.getMethod("createBond");
+                                    createBondMethod.invoke(device);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            // 已配對
+                            case BluetoothDevice.BOND_BONDED:
+                                try {
+                                    // 連線
+                                    connect(device);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                        }
+                    }
+                } else if(BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)) {
+                    // 狀態改變的廣播
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    name = device.getName();
+                    if (device.getName().equalsIgnoreCase(name)) {
+                        connectState = device.getBondState();
+                        switch (connectState) {
+                            case BluetoothDevice.BOND_NONE:
+                                break;
+                            case BluetoothDevice.BOND_BONDING:
+                                break;
+                            case BluetoothDevice.BOND_BONDED:
+                                try {
+                                    // 連線
+                                    connect(device);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+        };
+
+        registerReceiver(receiver, intentFilter);
+        adapter.startDiscovery();
+    }
+
+    protected void init() {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
         webView.setWebViewClient(new WebViewClient()); //不調用系統瀏覽器
-        webView.loadUrl("https://bin.webduino.io/dodax/1/edit?");
+        webView.loadUrl("https://bin.webduino.io/coqam/1");
 
 
         et_number.setVisibility(View.INVISIBLE);
@@ -83,16 +181,16 @@ public class AutoActivity extends AppCompatActivity {
                             InputMethodManager inputManager = (InputMethodManager)
                                     getSystemService(Context.INPUT_METHOD_SERVICE);
 
-                    assert inputManager != null;
-                    inputManager.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(),
-                            InputMethodManager.HIDE_NOT_ALWAYS);
+                            assert inputManager != null;
+                            inputManager.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(),
+                                    InputMethodManager.HIDE_NOT_ALWAYS);
 
-                    tv_context.setText("Ready");
-                    et_number.setText("");
-                    et_number.setVisibility(View.INVISIBLE);
-                    btn_send.setVisibility(View.INVISIBLE);
-                }
-            });
+                            tv_context.setText("Ready");
+                            et_number.setText("");
+                            et_number.setVisibility(View.INVISIBLE);
+                            btn_send.setVisibility(View.INVISIBLE);
+                        }
+                    });
                 }
             }
 
@@ -100,11 +198,14 @@ public class AutoActivity extends AppCompatActivity {
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 myVibrator.vibrate(500);
                 Toast.makeText(AutoActivity.this, dataSnapshot.child("座號").getValue().toString() + "到了", Toast.LENGTH_SHORT).show();
-                if(!check) {
+                if (!check) {
                     tv_number.setText(tv_number.getText().toString() + dataSnapshot.child("座號").getValue());
                     check = !check;
-                }else
+                } else
                     tv_number.setText(tv_number.getText().toString() + "," + dataSnapshot.child("座號").getValue());
+                MediaPlayer mediaPlayer01;
+                mediaPlayer01 = MediaPlayer.create(AutoActivity.this, R.raw.celtic_fantasy);
+                mediaPlayer01.start();
             }
 
             @Override
@@ -122,5 +223,15 @@ public class AutoActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+
+    private void connect(BluetoothDevice device) throws IOException {
+        // 固定的UUID
+        final String SPP_UUID = "00001101-0000-1000-8000-00805F9B34FB";
+        UUID uuid = UUID.fromString(SPP_UUID);
+        BluetoothSocket socket = device.createRfcommSocketToServiceRecord(uuid);
+        socket.connect();
     }
 }
